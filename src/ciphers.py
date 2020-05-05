@@ -1,13 +1,8 @@
 # All ciphers here
-from concurrent import futures
-from concurrent.futures.thread import ThreadPoolExecutor
-from typing import List
-
 from Crypto.Cipher import DES3, AES
 from Crypto.Util.Padding import pad, unpad
 from Crypto.Random import get_random_bytes
 
-# noinspection DuplicatedCode
 def AES_encrypt(key: bytes, plaintext: str, mode: int, iv=None, nonce=None, counter=0):
     """
     Perform encryption using AES
@@ -30,7 +25,6 @@ def AES_encrypt(key: bytes, plaintext: str, mode: int, iv=None, nonce=None, coun
     return cipher.encrypt(pad(bytes(plaintext, 'utf-8'), AES.block_size))
 
 
-# noinspection DuplicatedCode,PyShadowingNames
 def AES_decrypt(key: bytes, ciphertext: bytes, mode: int, iv=None, nonce=None, counter=0):
     """
     Perform decryption using AES
@@ -74,7 +68,7 @@ def DES3_encrypt(key: bytes, plaintext: str, mode=DES3.MODE_ECB, iv=None, nonce=
         return None
     return cipher.encrypt(pad(plaintext.encode('utf-8'), DES3.block_size))
     
-def DES3_decrypt(key: bytes, ciphertext: str, mode=DES3.MODE_ECB, iv=None, nonce=None, counter=0):
+def DES3_decrypt(key: bytes, ciphertext: bytes, mode=DES3.MODE_ECB, iv=None, nonce=None, counter=0):
     """
     Decrypt text via 3DES algorithm from PyCryptodome
     :param key: key used for encryption
