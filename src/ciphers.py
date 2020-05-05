@@ -54,6 +54,7 @@ def AES_decrypt(key: bytes, ciphertext: bytes, mode: int, iv=None, nonce=None, c
     return plaintext.decode('utf-8')
 
 
+# noinspection PyShadowingNames
 class CustomAES:
     """
     Class to make AES encryption using different modes and with transparent parallelism
@@ -76,7 +77,6 @@ class CustomAES:
         """
         self.__result[index:index + AES.block_size] = self.__cipher.encrypt(plaintext)
 
-    # noinspection PyShadowingNames
     def __EBC_decrypt_worker(self, ciphertext, index) -> None:
         """
         Decrypt ciphertext of length 16 and put in result list at index
@@ -102,7 +102,7 @@ class CustomAES:
         futures.wait(status)
         return bytes(self.__result)
 
-    # noinspection DuplicatedCode,PyShadowingNames
+    # noinspection DuplicatedCode
     def decrypt_EBC(self, ciphertext: bytes) -> str:
         """
         Perform decryption using AES with transparent concurrency
