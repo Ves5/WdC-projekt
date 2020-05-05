@@ -47,7 +47,7 @@ class CustomModes:
         """
         return bytes([_a ^ _b for _a, _b in zip(ba1, ba2)])
 
-    def __EBC_encrypt_worker(self, plaintext, index):
+    def __EBC_encrypt_worker(self, plaintext: bytes, index: int):
         """
         Encrypt plaintext of one block and put in result list at index
         :param plaintext: block to be encrypted
@@ -55,7 +55,7 @@ class CustomModes:
         """
         self.__result[index:index + self.__block_size] = self.__cipher.encrypt(plaintext)
 
-    def __EBC_decrypt_worker(self, ciphertext, index):
+    def __EBC_decrypt_worker(self, ciphertext: bytes, index: int):
         """
         Decrypt ciphertext of one block and put in result list at index
         :param ciphertext: block to be decrypted
@@ -126,7 +126,7 @@ class CustomModes:
 
             return bytes(self.__result)
 
-    def __CBC_decrypt_worker(self, ciphertext, previous, index):
+    def __CBC_decrypt_worker(self, ciphertext: bytes, previous: bytes, index: int):
         """
         Decrypt ciphertext of block size length and put in result list at index
         :param ciphertext: block to be decrypted
@@ -204,7 +204,7 @@ class CustomModes:
         
         return bytes(self.__result)
 
-    def __CFB_decrypt_worker(self, ciphertext, previous, index):
+    def __CFB_decrypt_worker(self, ciphertext:bytes , previous: int, index: int):
         """
         Decrypt ciphertext of block size length and put in result list at index
         :param ciphertext: block to be decrypted
@@ -306,7 +306,7 @@ class CustomModes:
             plaintext = unpad(bytes(self.__result), self.__block_size)
             return plaintext.decode('utf-8')
 
-    def __CRT_encrypt_worker(self, plaintext, ctrblock, index):
+    def __CRT_encrypt_worker(self, plaintext: bytes, ctrblock: bytes, index: int):
         """
         Encrypt ciphertext of block size length and put in result list at index
         :param plaintext: block to be encrypted
@@ -321,6 +321,7 @@ class CustomModes:
         :return: ciphertext
         """
         if self.nonce is not None:
+            temp_counter = self.counter
             plaintext = pad(bytes(plaintext, 'utf-8'), self.__block_size)
             self.__result = [None] * len(plaintext)
 
@@ -334,7 +335,7 @@ class CustomModes:
                 i += self.__block_size
                 self.counter += 1
             
-            self.counter = 0
+            self.counter = temp_counter
             futures.wait(status)
             return bytes(self.__result)
     
@@ -345,6 +346,7 @@ class CustomModes:
         :return: ciphertext
         """
         if self.nonce is not None:
+            temp_counter = self.counter
             plaintext = pad(bytes(plaintext, 'utf-8'), self.__block_size)
             self.__result = [None] * len(plaintext)
 
@@ -357,11 +359,11 @@ class CustomModes:
                 i += self.__block_size
                 self.counter += 1
             
-            self.counter = 0
+            self.counter = temp_counter
 
             return bytes(self.__result)
 
-    def __CRT_decrypt_worker(self, ciphertext, ctrblock, index):
+    def __CRT_decrypt_worker(self, ciphertext: bytes, ctrblock: bytes, index: int):
         """
         Decrypt ciphertext of block size length and put in result list at index
         :param ciphertext: block to be decrypted
@@ -393,7 +395,7 @@ class CustomModes:
             plaintext = unpad(bytes(self.__result), self.__block_size)
             return plaintext.decode('utf-8')
 
-    def decrypt_CTR_slow(self, ciphertext: str):
+    def decrypt_CTR_slow(self, ciphertext: bytes):
         """
         Perform CTR decryption using AES/DES3 without concurrency; nonce must be set
         :param ciphertext: ciphertext to be decrypted
@@ -426,8 +428,9 @@ des3 = CustomModes(rkey, "DES3")
 des3.iv = riv
 des3.nonce = rnonce
 
+des3.counter = 126
 print(text)
-encrypted = des3.encrypt_CTR_slow(text)
+encrypted = des3.encrypt_CTR(text)
 print(encrypted)
-decrypted = des3.decrypt_CTR_slow(encrypted)
+decrypted = des3.decrypt_CTR(encrypted)
 print(decrypted)
