@@ -103,7 +103,7 @@ class CustomModes:
 
     def encrypt_CBC(self, plaintext: str):
         """
-        Perform CBC encryption using AES; initialization vector must be set
+        Perform CBC encryption using AES/DES3; initialization vector must be set
         :param plaintext: text to be encrypted
         :return: ciphertext
         """
@@ -134,7 +134,7 @@ class CustomModes:
 
     def decrypt_CBC(self, ciphertext: bytes):
         """
-        Perform EBC decryption using AES/DES3 with transparent concurrency; initialization vector must be set
+        Perform CBC decryption using AES/DES3 with transparent concurrency; initialization vector must be set
         :param ciphertext: ciphertext to be decrypted
         :return: plaintext
         """
@@ -159,7 +159,7 @@ class CustomModes:
 
     def decrypt_CBC_slow(self, ciphertext: bytes):
         """
-        Perform EBC decryption using AES/DES3 without concurrency; initialization vector must be set
+        Perform CBC decryption using AES/DES3 without concurrency; initialization vector must be set
         :param ciphertext: ciphertext to be decrypted
         :return: plaintext
         """
@@ -180,16 +180,140 @@ class CustomModes:
             plaintext = unpad(bytes(self.__result), self.__block_size)
             return plaintext.decode('utf-8')
 
-#text = "text to be encrypted, z polśkimi znąkami"
-#rkey = get_random_bytes(24)
-#riv = get_random_bytes(8)
+    def encrypt_CFB(self, plaintext: str):
+        """
+        Perform CFB encryption using AES/DES3; initialization vector must be set
+        :param plaintext: text to be encrypted
+        :return: ciphertext
+        """
+        if self.iv is not None:
+            plaintext = pad(bytes(plaintext, 'utf-8'), self.__block_size)
+            self.__result = [None] * len(plaintext)
+            
+            # first block
+            temp = self.__cipher.encrypt(self.iv)
+            self.__result[0:self.__block_size] = self.__byte_xor(temp, plaintext[0:self.__block_size])
+
+            i=self.__block_size
+            while i < len(plaintext):
+                temp = self.__cipher.encrypt(bytes(self.__result[(i - self.__block_size):i]))
+                self.__result[i:i+self.__block_size] = self.__byte_xor(temp, plaintext[i:i + self.__block_size])
+                i += self.__block_size
+        
+        return bytes(self.__result)
+
+    def __CFB_decrypt_worker(self, ciphertext, previous, index):
+        """
+        Decrypt ciphertext of block size length and put in result list at index
+        :param ciphertext: block to be decrypted
+        :param index: index for result
+        """
+        self.__result[index: index + self.__block_size] = self.__byte_xor(self.__cipher.encrypt(previous), ciphertext)
+
+    def decrypt_CFB(self, ciphertext: bytes):
+        """
+        Perform CFB decryption using AES/DES3 with transparent concurrency; initialization vector must be set
+        :param ciphertext: ciphertext to be decrypted
+        :return: plaintext
+        """
+        if self.iv is not None:
+            self.__result = [None] * len(ciphertext)
+
+            # first block into jobs
+            status = [self.__executor.submit(self.__CFB_decrypt_worker, ciphertext[0:self.__block_size],
+                      self.iv, 0)]
+            
+            # place all next blocks in jobs queue
+            i = self.__block_size
+            while i < len(ciphertext):
+                status.append(self.__executor.submit(self.__CFB_decrypt_worker, ciphertext[i:i+self.__block_size],
+                              ciphertext[i-self.__block_size:i], i))
+                i += self.__block_size
+
+            # wait for all jobs to finish
+            futures.wait(status)
+            plaintext = unpad(bytes(self.__result), self.__block_size)
+            return plaintext.decode('utf-8')
+
+    def decrypt_CFB_slow(self, ciphertext: bytes):
+        """
+        Perform CFB decryption using AES/DES3 without concurrency; initialization vector must be set
+        :param ciphertext: ciphertext to be decrypted
+        :return: plaintext
+        """
+        if self.iv is not None:
+            self.__result = [None] * len(ciphertext)
+
+            # first block
+            temp = self.__cipher.encrypt(self.iv)
+            self.__result[0:self.__block_size] = self.__byte_xor(temp, ciphertext[0: self.__block_size])
+
+            # all next blocks
+            i = self.__block_size
+            while i < len(ciphertext):
+                temp = self.__cipher.encrypt(ciphertext[i - self.__block_size:i])
+                self.__result[i:i+self.__block_size] = self.__byte_xor(temp, ciphertext[i:i+self.__block_size])
+                i += self.__block_size
+            
+            plaintext = unpad(bytes(self.__result), self.__block_size)
+            return plaintext.decode('utf-8')
+
+    def encrypt_OFB(self, plaintext: str):
+        """
+        Perform OFB encryption using AES/DES3; initialization vector must be set
+        :param plaintext: text to be encrypted
+        :return: ciphertext
+        """
+        if self.iv is not None:
+            plaintext = pad(bytes(plaintext, 'utf-8'), self.__block_size)
+            self.__result = [None] * len(plaintext)
+
+            # first block
+            temp = self.__cipher.encrypt(self.iv)
+            self.__result[0:self.__block_size] = self.__byte_xor(temp, plaintext[0:self.__block_size])
+
+            # all other blocks
+            i = self.__block_size
+            while i < len(plaintext):
+                temp = self.__cipher.encrypt(temp)
+                self.__result[i:i+self.__block_size] = self.__byte_xor(temp, plaintext[i:i+self.__block_size])
+                i += self.__block_size
+
+            return bytes(self.__result)
+
+    def decrypt_OFB(self, ciphertext: bytes):
+        """
+        Perform OFB decryption using AES/DES3; initialization vector must be set
+        :param ciphertext: ciphertext to be decrypted
+        :return: plaintext
+        """
+        if self.iv is not None:
+            self.__result = [None] * len(ciphertext)
+
+            # first block
+            temp = self.__cipher.encrypt(self.iv)
+            self.__result[0:self.__block_size] = self.__byte_xor(temp, ciphertext[0:self.__block_size])
+
+            # all other blocks
+            i = self.__block_size
+            while i < len(ciphertext):
+                temp = self.__cipher.encrypt(temp)
+                self.__result[i:i+self.__block_size] = self.__byte_xor(temp, ciphertext[i:i+self.__block_size])
+                i += self.__block_size
+            
+            plaintext = unpad(bytes(self.__result), self.__block_size)
+            return plaintext.decode('utf-8')
+
+text = "text to be encrypted, z polśkimi znąkami"
+rkey = get_random_bytes(24)
+riv = get_random_bytes(8)
 #rnonce = get_random_bytes(1)
 
-#des3 = CustomModes(rkey, "DES3")
-#des3.iv = riv
+des3 = CustomModes(rkey, "DES3")
+des3.iv = riv
 
-#print(text)
-#encrypted = des3.encrypt_CBC(text)
-#print(encrypted)
-#decrypted = des3.decrypt_CBC_slow(encrypted)
-#print(decrypted)
+print(text)
+encrypted = des3.encrypt_OFB(text)
+print(encrypted)
+decrypted = des3.decrypt_OFB(encrypted)
+print(decrypted)
