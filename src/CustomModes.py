@@ -37,6 +37,8 @@ class CustomModes:
             self.__block_size = DES3.block_size
         
         self.iv = None  # initialization vector needed for some modes
+        self.counter = 0 # counter needed for CTR mode
+        self.nonce = None # nonce needed for CTR mdoe
 
     @staticmethod
     def __byte_xor(ba1, ba2):
@@ -304,16 +306,128 @@ class CustomModes:
             plaintext = unpad(bytes(self.__result), self.__block_size)
             return plaintext.decode('utf-8')
 
+    def __CRT_encrypt_worker(self, plaintext, ctrblock, index):
+        """
+        Encrypt ciphertext of block size length and put in result list at index
+        :param plaintext: block to be encrypted
+        :param index: index for result
+        """
+        self.__result[index:index + self.__block_size] = self.__byte_xor(plaintext, self.__cipher.encrypt(ctrblock))
+
+    def encrypt_CTR(self, plaintext: str):
+        """
+        Perform CTR encryption using AES/DES3 with transparent concurrency; nonce must be set
+        :param plaintext: plaintext to be encrypted
+        :return: ciphertext
+        """
+        if self.nonce is not None:
+            plaintext = pad(bytes(plaintext, 'utf-8'), self.__block_size)
+            self.__result = [None] * len(plaintext)
+
+            # convert all blocks to jobs
+            status = []
+            i = 0
+            while i < len(plaintext):
+                ctrblock = self.__byte_xor(self.nonce, self.counter.to_bytes(8, 'big'))
+                status.append(self.__executor.submit(self.__CRT_encrypt_worker, plaintext[i:i+self.__block_size],
+                                                     ctrblock, i))
+                i += self.__block_size
+                self.counter += 1
+            
+            self.counter = 0
+            futures.wait(status)
+            return bytes(self.__result)
+    
+    def encrypt_CTR_slow(self, plaintext: str):
+        """
+        Perform CTR encryption using AES/DES3 without concurrency; nonce must be set
+        :param plaintext: plaintext to be encrypted
+        :return: ciphertext
+        """
+        if self.nonce is not None:
+            plaintext = pad(bytes(plaintext, 'utf-8'), self.__block_size)
+            self.__result = [None] * len(plaintext)
+
+            # convert all blocks to jobs
+            i = 0
+            while i < len(plaintext):
+                ctrblock = self.__byte_xor(self.nonce, self.counter.to_bytes(8, 'big'))
+                temp = self.__cipher.encrypt(ctrblock)
+                self.__result[i:i+self.__block_size] = self.__byte_xor(temp, plaintext[i:i+self.__block_size])
+                i += self.__block_size
+                self.counter += 1
+            
+            self.counter = 0
+
+            return bytes(self.__result)
+
+    def __CRT_decrypt_worker(self, ciphertext, ctrblock, index):
+        """
+        Decrypt ciphertext of block size length and put in result list at index
+        :param ciphertext: block to be decrypted
+        :param index: index for result
+        """
+        self.__result[index:index + self.__block_size] = self.__byte_xor(ciphertext, self.__cipher.encrypt(ctrblock))
+
+    def decrypt_CTR(self, ciphertext: bytes):
+        """
+        Perform CTR decryption using AES/DES3 with transparent concurrency; nonce must be set
+        :param ciphertext: ciphertext to be decrypted
+        :return: plaintext
+        """
+        if self.nonce is not None:
+            self.__result = [None] * len(ciphertext)
+
+            # convert all blocks to jobs
+            status = []
+            i = 0
+            while i < len(ciphertext):
+                ctrblock = self.__byte_xor(self.nonce, self.counter.to_bytes(8, 'big'))
+                status.append(self.__executor.submit(self.__CRT_decrypt_worker, ciphertext[i:i+self.__block_size],
+                                                     ctrblock, i))
+                i += self.__block_size
+                self.counter += 1
+
+            # wait for all jobs to finish
+            futures.wait(status)
+            plaintext = unpad(bytes(self.__result), self.__block_size)
+            return plaintext.decode('utf-8')
+
+    def decrypt_CTR_slow(self, ciphertext: str):
+        """
+        Perform CTR decryption using AES/DES3 without concurrency; nonce must be set
+        :param ciphertext: ciphertext to be decrypted
+        :return: plaintext
+        """
+        if self.nonce is not None:
+            self.__result = [None] * len(ciphertext)
+
+            # convert all blocks to jobs
+            i = 0
+            while i < len(ciphertext):
+                ctrblock = self.__byte_xor(self.nonce, self.counter.to_bytes(8, 'big'))
+                temp = self.__cipher.encrypt(ctrblock)
+                self.__result[i:i+self.__block_size] = self.__byte_xor(temp, ciphertext[i:i+self.__block_size])
+                i += self.__block_size
+                self.counter += 1
+            
+            self.counter = 0
+
+            plaintext = unpad(bytes(self.__result), self.__block_size)
+            return plaintext.decode('utf-8')
+
+
 text = "text to be encrypted, z polśkimi znąkami"
 rkey = get_random_bytes(24)
 riv = get_random_bytes(8)
-#rnonce = get_random_bytes(1)
+rnonce = get_random_bytes(8)
 
 des3 = CustomModes(rkey, "DES3")
 des3.iv = riv
+des3.nonce = rnonce
 
 print(text)
-encrypted = des3.encrypt_OFB(text)
+encrypted = des3.encrypt_CTR_slow(text)
 print(encrypted)
-decrypted = des3.decrypt_OFB(encrypted)
+decrypted = des3.decrypt_CTR_slow(encrypted)
 print(decrypted)
