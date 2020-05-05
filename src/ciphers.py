@@ -3,10 +3,9 @@ from concurrent import futures
 from concurrent.futures.thread import ThreadPoolExecutor
 from typing import List
 
-from Crypto.Cipher import AES
+from Crypto.Cipher import DES3, AES
 from Crypto.Util.Padding import pad, unpad
 from Crypto.Random import get_random_bytes
-
 
 # noinspection DuplicatedCode
 def AES_encrypt(key: bytes, plaintext: str, mode: int, iv=None, nonce=None, counter=0):
@@ -53,3 +52,45 @@ def AES_decrypt(key: bytes, ciphertext: bytes, mode: int, iv=None, nonce=None, c
         return None
     plaintext = unpad(cipher.decrypt(ciphertext), AES.block_size)
     return plaintext.decode('utf-8')
+
+def DES3_encrypt(key: bytes, plaintext: str, mode=DES3.MODE_ECB, iv=None, nonce=None, counter=0):
+    """
+    Encrypt text via 3DES algorithm from PyCryptodome
+    :param key: key used for encryption
+    :param plaintext: text to be encrypted
+    :param mode: mode of DES3 (default ECB) [DES3.MODE_ECB/CTR/CBC/CFB/OFB]
+    :param iv: initialization vector (8 bytes long)
+    :param nonce: nonce for CTR mode (length 0-7)
+    :param counter: counter init value (default 0)
+    :return: encrypted text
+    """
+    if mode == DES3.MODE_ECB:
+        cipher = DES3.new(key, mode)
+    elif mode == DES3.MODE_CTR and nonce is not None:
+        cipher = DES3.new(key, mode, nonce=nonce, initial_value=counter)
+    elif mode == DES3.MODE_CBC or DES3.MODE_CFB or DES3.MODE_OFB and iv is not None:
+        cipher = DES3.new(key, mode, iv=iv)
+    else:
+        return None
+    return cipher.encrypt(pad(plaintext.encode('utf-8'), DES3.block_size))
+    
+def DES3_decrypt(key: bytes, ciphertext: str, mode=DES3.MODE_ECB, iv=None, nonce=None, counter=0):
+    """
+    Decrypt text via 3DES algorithm from PyCryptodome
+    :param key: key used for encryption
+    :param cyphertext: text to be encrypted
+    :param mode: mode of DES3 (default ECB) [DES3.MODE_ECB/CTR/CBC/CFB/OFB]
+    :param iv: initialization vector (8 bytes long)
+    :param nonce: nonce for CTR mode (length 0-7)
+    :param counter: counter init value (default 0)
+    :return: decrypted text
+    """
+    if mode == DES3.MODE_ECB:
+        cipher = DES3.new(key, mode)
+    elif mode == DES3.MODE_CTR and nonce is not None:
+        cipher = DES3.new(key, mode, nonce=nonce, initial_value=counter)
+    elif (mode == DES3.MODE_CBC or DES3.MODE_CFB or DES3.MODE_OFB) and iv is not None:
+        cipher = DES3.new(key, mode, iv=iv)
+    else:
+        return None
+    return unpad(cipher.decrypt(ciphertext), DES3.block_size).decode('utf-8')
