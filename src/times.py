@@ -3,7 +3,7 @@ import random
 import string
 import timeit
 import pandas
-import gc
+import gc, os
 from ciphers import *
 
 def randomString(length):
@@ -16,17 +16,22 @@ def genStringLengths(start, amount):
         lengths.append(lengths[i]*2)
     return lengths
 
-
-
+try:
+    os.mkdir("csv")
+except:
+    pass
 #common beginning for measuring time for different crypto functions
 # TODO: change 15 for to larger for ciphers other than RSA
-string_length = genStringLengths(32, 15)
+string_length = genStringLengths(32, 25)
 list_of_strings = []
-for i in string_length:
-    # start = timeit.default_timer()
-    list_of_strings.append(randomString(i))
-    # print("%d - %e s" % (i, timeit.default_timer() - start))
-pass
+for index, i in enumerate(string_length):
+    start = timeit.default_timer()
+    if i <= 1024:
+        list_of_strings.append(randomString(i))
+    else:
+        list_of_strings.append("".join((list_of_strings[index-1], list_of_strings[index-1])))
+    print("%d - %e s" % (len(list_of_strings[index]), timeit.default_timer() - start))
+
 
 
 # DES3-ECB - 16 bytes key
@@ -92,7 +97,9 @@ name = "RSA"
 public_key, private_key = get_key_pair()
 for string_it in list_of_strings:
     if len(string_it) > 2**20:
-        break
+        encryption_times.append('-')
+        decryption_times.append('-')
+        continue
     gc.disable()
     if len(string_it) > 128:
         # split into 128-char parts
