@@ -1,5 +1,6 @@
 # All ciphers here
 from Crypto.Cipher import DES3, AES
+from Crypto.Util import Counter
 from Crypto.Util.Padding import pad, unpad
 from Crypto.Random import get_random_bytes
 from Crypto.Cipher import Salsa20
@@ -22,7 +23,7 @@ def AES_encrypt(key: bytes, plaintext: str, mode: int, iv=None, nonce=None, coun
     elif mode is AES.MODE_ECB:
         cipher = AES.new(key, mode)
     elif mode is AES.MODE_CTR and nonce is not None:
-        cipher = AES.new(key, mode, nonce=nonce, initial_value=counter)
+        cipher = AES.new(key, mode, nonce=nonce, counter=Counter.new(nbits=len(nonce), initial_value=counter))
     else:
         return None
     return cipher.encrypt(pad(bytes(plaintext, 'utf-8'), AES.block_size))
@@ -44,7 +45,7 @@ def AES_decrypt(key: bytes, ciphertext: bytes, mode: int, iv=None, nonce=None, c
     elif mode is AES.MODE_ECB:
         cipher = AES.new(key, mode)
     elif mode is AES.MODE_CTR and nonce is not None:
-        cipher = AES.new(key, mode, nonce=nonce, initial_value=counter)
+        cipher = AES.new(key, mode, nonce=nonce, counter=Counter.new(nbits=len(nonce), initial_value=counter))
     else:
         return None
     plaintext = unpad(cipher.decrypt(ciphertext), AES.block_size)
@@ -64,7 +65,7 @@ def DES3_encrypt(key: bytes, plaintext: str, mode=DES3.MODE_ECB, iv=None, nonce=
     if mode == DES3.MODE_ECB:
         cipher = DES3.new(key, mode)
     elif mode == DES3.MODE_CTR and nonce is not None:
-        cipher = DES3.new(key, mode, nonce=nonce, initial_value=counter)
+        cipher = DES3.new(key, mode, nonce=nonce, counter=Counter.new(nbits=len(nonce), initial_value=counter))
     elif mode == DES3.MODE_CBC or DES3.MODE_CFB or DES3.MODE_OFB and iv is not None:
         cipher = DES3.new(key, mode, iv=iv)
     else:
@@ -85,7 +86,7 @@ def DES3_decrypt(key: bytes, ciphertext: bytes, mode=DES3.MODE_ECB, iv=None, non
     if mode == DES3.MODE_ECB:
         cipher = DES3.new(key, mode)
     elif mode == DES3.MODE_CTR and nonce is not None:
-        cipher = DES3.new(key, mode, nonce=nonce, initial_value=counter)
+        cipher = DES3.new(key, mode, nonce=nonce, counter=Counter.new(nbits=len(nonce), initial_value=counter))
     elif (mode == DES3.MODE_CBC or DES3.MODE_CFB or DES3.MODE_OFB) and iv is not None:
         cipher = DES3.new(key, mode, iv=iv)
     else:

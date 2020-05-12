@@ -511,7 +511,7 @@ df = pandas.DataFrame({
 })
 df.to_csv('csv/%s_data.csv' % name)
 
-
+"""
 # ---------------------------------------------------------------------------------------------------
 # AES - Custom modes - 32 bytes key
 # ---------------------------------------------------------------------------------------------------
@@ -525,7 +525,7 @@ aes.iv = get_random_bytes(AES.block_size)
 # operation (concatenation, addition, or XOR) to produce the actual unique counter block for encryption."
 # for our implementation we're using XOR of nonce and counter
 aes.nonce = get_random_bytes(AES.block_size) 
-
+"""
 # Custom-AES-ECB - 32 bytes key
 encryption_times = []
 decryption_times = []
@@ -553,7 +553,7 @@ df = pandas.DataFrame({
     'decryption_times':decryption_times,
 })
 df.to_csv('csv/%s_data.csv' % name)
-
+"""
 # Custom-AES-CBC - 32 bytes key
 encryption_times = []
 decryption_times = []
@@ -591,7 +591,7 @@ df = pandas.DataFrame({
     'slow_decryption_times':slow_decryption_times,
 })
 df.to_csv('csv/%s_data.csv' % name)
-
+"""
 # Custom-AES-CFB - 32 bytes key
 encryption_times = []
 decryption_times = []
@@ -705,7 +705,7 @@ df = pandas.DataFrame({
     'slow_decryption_times':slow_decryption_times,
 })
 df.to_csv('csv/%s_data.csv' % name)
-"""
+
 
 # ---------------------------------------------------------------------------------------------------
 # DES3 - Cryptodome
@@ -714,7 +714,7 @@ df.to_csv('csv/%s_data.csv' % name)
 # 16 bytes key
 # -------------------------------------
 print("DES3 - 16")
-"""
+
 # DES3-ECB - 16 bytes key
 encryption_times = []
 decryption_times = []
@@ -837,7 +837,8 @@ df = pandas.DataFrame({
     'decryption_times':decryption_times,
 })
 df.to_csv('csv/%s_data.csv' % name)
-"""
+
+
 # DES3-CTR - 16 bytes key
 encryption_times = []
 decryption_times = []
@@ -1309,3 +1310,4 @@ df = pandas.DataFrame({
     'decryption_times':decryption_times,
 })
 df.to_csv('csv/%s_data.csv' % name)
+"""
