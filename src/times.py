@@ -36,7 +36,7 @@ for index, i in enumerate(string_length):
 # ---------------------------------------------------------------------------------------------------
 # AES - Cryptodome
 # ---------------------------------------------------------------------------------------------------
-"""
+
 # 16 bytes key
 # -------------------------------------
 print("AES - 16")
@@ -48,7 +48,7 @@ mode = AES.MODE_ECB
 name = "AES-ECB-16"
 key = get_random_bytes(16)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -79,7 +79,7 @@ name = "AES-CBC-16"
 iv = get_random_bytes(AES.block_size)
 key = get_random_bytes(16)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -110,7 +110,7 @@ name = "AES-CFB-16"
 iv = get_random_bytes(AES.block_size)
 key = get_random_bytes(16)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -141,7 +141,7 @@ name = "AES-OFB-16"
 iv = get_random_bytes(AES.block_size)
 key = get_random_bytes(16)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -169,10 +169,10 @@ encryption_times = []
 decryption_times = []
 mode = AES.MODE_CTR
 name = "AES-CTR-16"
-nonce = get_random_bytes(AES.block_size - 7)
+nonce = get_random_bytes(AES.block_size // 2)
 key = get_random_bytes(16)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -206,7 +206,7 @@ mode = AES.MODE_ECB
 name = "AES-ECB-24"
 key = get_random_bytes(24)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -237,7 +237,7 @@ name = "AES-CBC-24"
 iv = get_random_bytes(AES.block_size)
 key = get_random_bytes(24)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -268,7 +268,7 @@ name = "AES-CFB-24"
 iv = get_random_bytes(AES.block_size)
 key = get_random_bytes(24)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -299,7 +299,7 @@ name = "AES-OFB-24"
 iv = get_random_bytes(AES.block_size)
 key = get_random_bytes(24)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -327,10 +327,10 @@ encryption_times = []
 decryption_times = []
 mode = AES.MODE_CTR
 name = "AES-CTR-24"
-nonce = get_random_bytes(AES.block_size - 7)
+nonce = get_random_bytes(AES.block_size // 2)
 key = get_random_bytes(24)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -364,7 +364,7 @@ mode = AES.MODE_ECB
 name = "AES-ECB-32"
 key = get_random_bytes(32)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -395,7 +395,7 @@ name = "AES-CBC-32"
 iv = get_random_bytes(AES.block_size)
 key = get_random_bytes(32)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -426,7 +426,7 @@ name = "AES-CFB-32"
 iv = get_random_bytes(AES.block_size)
 key = get_random_bytes(32)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -457,7 +457,7 @@ name = "AES-OFB-32"
 iv = get_random_bytes(AES.block_size)
 key = get_random_bytes(32)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -485,10 +485,10 @@ encryption_times = []
 decryption_times = []
 mode = AES.MODE_CTR
 name = "AES-CTR-32"
-nonce = get_random_bytes(AES.block_size - 7)
+nonce = get_random_bytes(AES.block_size // 2)
 key = get_random_bytes(32)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -511,7 +511,7 @@ df = pandas.DataFrame({
 })
 df.to_csv('csv/%s_data.csv' % name)
 
-"""
+
 # ---------------------------------------------------------------------------------------------------
 # AES - Custom modes - 32 bytes key
 # ---------------------------------------------------------------------------------------------------
@@ -525,13 +525,13 @@ aes.iv = get_random_bytes(AES.block_size)
 # operation (concatenation, addition, or XOR) to produce the actual unique counter block for encryption."
 # for our implementation we're using XOR of nonce and counter
 aes.nonce = get_random_bytes(AES.block_size) 
-"""
+
 # Custom-AES-ECB - 32 bytes key
 encryption_times = []
 decryption_times = []
 name = "Custom-AES-ECB-32"
 for string_it in list_of_strings:
-    if len(string_it) > 2**22:
+    if len(string_it) > 2**20 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -553,14 +553,14 @@ df = pandas.DataFrame({
     'decryption_times':decryption_times,
 })
 df.to_csv('csv/%s_data.csv' % name)
-"""
+
 # Custom-AES-CBC - 32 bytes key
 encryption_times = []
 decryption_times = []
 slow_decryption_times = []
 name = "Custom-AES-CBC-32"
 for string_it in list_of_strings:
-    if len(string_it) > 2**22:
+    if len(string_it) > 2**20 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         slow_decryption_times.append('-')
@@ -571,16 +571,16 @@ for string_it in list_of_strings:
     encoded_data = aes.encrypt_CBC(string_it)
     duration = timeit.default_timer() - start
     encryption_times.append(duration)
-    # concurrent decrypt
-    start = timeit.default_timer()
-    received_data = aes.decrypt_CBC(encoded_data)
-    duration = timeit.default_timer() - start
-    decryption_times.append(duration)
     # slow decrypt
     start = timeit.default_timer()
     received_data = aes.decrypt_CBC_slow(encoded_data)
     duration = timeit.default_timer() - start
     slow_decryption_times.append(duration)
+    # concurrent decrypt
+    start = timeit.default_timer()
+    received_data = aes.decrypt_CBC(encoded_data)
+    duration = timeit.default_timer() - start
+    decryption_times.append(duration)
     gc.enable()
     gc.collect()
 # save data
@@ -591,14 +591,14 @@ df = pandas.DataFrame({
     'slow_decryption_times':slow_decryption_times,
 })
 df.to_csv('csv/%s_data.csv' % name)
-"""
+
 # Custom-AES-CFB - 32 bytes key
 encryption_times = []
 decryption_times = []
 slow_decryption_times = []
 name = "Custom-AES-CFB-32"
 for string_it in list_of_strings:
-    if len(string_it) > 2**22:
+    if len(string_it) > 2**20 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         slow_decryption_times.append('-')
@@ -609,16 +609,16 @@ for string_it in list_of_strings:
     encoded_data = aes.encrypt_CFB(string_it)
     duration = timeit.default_timer() - start
     encryption_times.append(duration)
-    # concurrent decrypt
-    start = timeit.default_timer()
-    received_data = aes.decrypt_CFB(encoded_data)
-    duration = timeit.default_timer() - start
-    decryption_times.append(duration)
     # slow decrypt
     start = timeit.default_timer()
     received_data = aes.decrypt_CFB_slow(encoded_data)
     duration = timeit.default_timer() - start
     slow_decryption_times.append(duration)
+    # concurrent decrypt
+    start = timeit.default_timer()
+    received_data = aes.decrypt_CFB(encoded_data)
+    duration = timeit.default_timer() - start
+    decryption_times.append(duration)
     gc.enable()
     gc.collect()
 # save data
@@ -635,7 +635,7 @@ encryption_times = []
 decryption_times = []
 name = "Custom-AES-OFB-32"
 for string_it in list_of_strings:
-    if len(string_it) > 2**22:
+    if len(string_it) > 2**20 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -667,40 +667,40 @@ slow_decryption_times = []
 slow_encryption_times = []
 name = "Custom-AES-CTR-32"
 for string_it in list_of_strings:
-    if len(string_it) > 2**22:
+    if len(string_it) > 2**20 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         slow_decryption_times.append('-')
         slow_encryption_times.append('-')
         continue
     gc.disable()
-    # concurent encrypt
-    start = timeit.default_timer()
-    encoded_data = aes.encrypt_CTR(string_it)
-    duration = timeit.default_timer() - start
-    encryption_times.append(duration)
     # slow encrypt
     start = timeit.default_timer()
     encoded_data = aes.encrypt_CTR_slow(string_it)
     duration = timeit.default_timer() - start
     slow_encryption_times.append(duration)
-    # concurrent decrypt
-    start = timeit.default_timer()
-    received_data = aes.decrypt_CTR(encoded_data)
-    duration = timeit.default_timer() - start
-    decryption_times.append(duration)
     # slow decrypt
     start = timeit.default_timer()
     received_data = aes.decrypt_CTR_slow(encoded_data)
     duration = timeit.default_timer() - start
     slow_decryption_times.append(duration)
+    # concurent encrypt
+    start = timeit.default_timer()
+    encoded_data = aes.encrypt_CTR(string_it)
+    duration = timeit.default_timer() - start
+    encryption_times.append(duration)
+    # concurrent decrypt
+    start = timeit.default_timer()
+    received_data = aes.decrypt_CTR(encoded_data)
+    duration = timeit.default_timer() - start
+    decryption_times.append(duration)
     gc.enable()
     gc.collect()
 # save data
 df = pandas.DataFrame({
     'string_length':string_length,
     'encryption_times':encryption_times,
-    'slow_decryption_times': slow_encryption_times,
+    'slow_encryption_times': slow_encryption_times,
     'decryption_times':decryption_times,
     'slow_decryption_times':slow_decryption_times,
 })
@@ -722,7 +722,7 @@ mode = DES3.MODE_ECB
 name = "DES3-ECB-16"
 key = get_random_bytes(16)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -753,7 +753,7 @@ name = "DES3-CBC-16"
 iv = get_random_bytes(DES3.block_size)
 key = get_random_bytes(16)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -784,7 +784,7 @@ name = "DES3-CFB-16"
 iv = get_random_bytes(DES3.block_size)
 key = get_random_bytes(16)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -815,7 +815,7 @@ name = "DES3-OFB-16"
 iv = get_random_bytes(DES3.block_size)
 key = get_random_bytes(16)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -838,16 +838,15 @@ df = pandas.DataFrame({
 })
 df.to_csv('csv/%s_data.csv' % name)
 
-
 # DES3-CTR - 16 bytes key
 encryption_times = []
 decryption_times = []
 mode = DES3.MODE_CTR
 name = "DES3-CTR-16"
-nonce = get_random_bytes(DES3.block_size - 6)
+nonce = get_random_bytes(DES3.block_size // 2)
 key = get_random_bytes(16)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -881,7 +880,7 @@ mode = DES3.MODE_ECB
 name = "DES3-ECB-24"
 key = get_random_bytes(24)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -912,7 +911,7 @@ name = "DES3-CBC-24"
 iv = get_random_bytes(DES3.block_size)
 key = get_random_bytes(24)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -943,7 +942,7 @@ name = "DES3-CFB-24"
 iv = get_random_bytes(DES3.block_size)
 key = get_random_bytes(24)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -974,7 +973,7 @@ name = "DES3-OFB-24"
 iv = get_random_bytes(DES3.block_size)
 key = get_random_bytes(24)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -1002,10 +1001,10 @@ encryption_times = []
 decryption_times = []
 mode = DES3.MODE_CTR
 name = "DES3-CTR-24"
-nonce = get_random_bytes(DES3.block_size - 3)
+nonce = get_random_bytes(DES3.block_size // 2)
 key = get_random_bytes(24)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -1047,7 +1046,7 @@ encryption_times = []
 decryption_times = []
 name = "Custom-DES3-ECB-24"
 for string_it in list_of_strings:
-    if len(string_it) > 2**22:
+    if len(string_it) > 2**20 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -1076,7 +1075,7 @@ decryption_times = []
 slow_decryption_times = []
 name = "Custom-DES3-CBC-24"
 for string_it in list_of_strings:
-    if len(string_it) > 2**22:
+    if len(string_it) > 2**20 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         slow_decryption_times.append('-')
@@ -1087,16 +1086,16 @@ for string_it in list_of_strings:
     encoded_data = des3.encrypt_CBC(string_it)
     duration = timeit.default_timer() - start
     encryption_times.append(duration)
-    # concurrent decrypt
-    start = timeit.default_timer()
-    received_data = des3.decrypt_CBC(encoded_data)
-    duration = timeit.default_timer() - start
-    decryption_times.append(duration)
     # slow decrypt
     start = timeit.default_timer()
     received_data = des3.decrypt_CBC_slow(encoded_data)
     duration = timeit.default_timer() - start
     slow_decryption_times.append(duration)
+    # concurrent decrypt
+    start = timeit.default_timer()
+    received_data = des3.decrypt_CBC(encoded_data)
+    duration = timeit.default_timer() - start
+    decryption_times.append(duration)
     gc.enable()
     gc.collect()
 # save data
@@ -1114,7 +1113,7 @@ decryption_times = []
 slow_decryption_times = []
 name = "Custom-DES3-CFB-24"
 for string_it in list_of_strings:
-    if len(string_it) > 2**22:
+    if len(string_it) > 2**20 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         slow_decryption_times.append('-')
@@ -1125,16 +1124,16 @@ for string_it in list_of_strings:
     encoded_data = des3.encrypt_CFB(string_it)
     duration = timeit.default_timer() - start
     encryption_times.append(duration)
-    # concurrent decrypt
-    start = timeit.default_timer()
-    received_data = des3.decrypt_CFB(encoded_data)
-    duration = timeit.default_timer() - start
-    decryption_times.append(duration)
     # slow decrypt
     start = timeit.default_timer()
     received_data = des3.decrypt_CFB_slow(encoded_data)
     duration = timeit.default_timer() - start
     slow_decryption_times.append(duration)
+    # concurrent decrypt
+    start = timeit.default_timer()
+    received_data = des3.decrypt_CFB(encoded_data)
+    duration = timeit.default_timer() - start
+    decryption_times.append(duration)
     gc.enable()
     gc.collect()
 # save data
@@ -1151,7 +1150,7 @@ encryption_times = []
 decryption_times = []
 name = "Custom-DES3-OFB-24"
 for string_it in list_of_strings:
-    if len(string_it) > 2**22:
+    if len(string_it) > 2**20 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -1183,40 +1182,40 @@ slow_decryption_times = []
 slow_encryption_times = []
 name = "Custom-DES3-CTR-24"
 for string_it in list_of_strings:
-    if len(string_it) > 2**22:
+    if len(string_it) > 2**20 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         slow_decryption_times.append('-')
         slow_encryption_times.append('-')
         continue
     gc.disable()
-    # concurent encrypt
-    start = timeit.default_timer()
-    encoded_data = des3.encrypt_CTR(string_it)
-    duration = timeit.default_timer() - start
-    encryption_times.append(duration)
     # slow encrypt
     start = timeit.default_timer()
     encoded_data = des3.encrypt_CTR_slow(string_it)
     duration = timeit.default_timer() - start
     slow_encryption_times.append(duration)
-    # concurrent decrypt
-    start = timeit.default_timer()
-    received_data = des3.decrypt_CTR(encoded_data)
-    duration = timeit.default_timer() - start
-    decryption_times.append(duration)
     # slow decrypt
     start = timeit.default_timer()
     received_data = des3.decrypt_CTR_slow(encoded_data)
     duration = timeit.default_timer() - start
     slow_decryption_times.append(duration)
+    # concurent encrypt
+    start = timeit.default_timer()
+    encoded_data = des3.encrypt_CTR(string_it)
+    duration = timeit.default_timer() - start
+    encryption_times.append(duration)
+    # concurrent decrypt
+    start = timeit.default_timer()
+    received_data = des3.decrypt_CTR(encoded_data)
+    duration = timeit.default_timer() - start
+    decryption_times.append(duration)
     gc.enable()
     gc.collect()
 # save data
-df = pandas.DataFrame({
+df = pandas.DataFrame(data={
     'string_length':string_length,
     'encryption_times':encryption_times,
-    'slow_decryption_times': slow_encryption_times,
+    'slow_encryption_times':slow_encryption_times,
     'decryption_times':decryption_times,
     'slow_decryption_times':slow_decryption_times,
 })
@@ -1236,7 +1235,7 @@ decryption_times = []
 name = "RSA"
 public_key, private_key = get_key_pair()
 for string_it in list_of_strings:
-    if len(string_it) > 2**20:
+    if len(string_it) > 2**20 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -1288,7 +1287,7 @@ decryption_times = []
 name = "Salsa20"
 key = get_random_bytes(16)
 for string_it in list_of_strings:
-    if len(string_it) > 2**5 and duration > 40:
+    if len(string_it) > 2**5 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
@@ -1310,4 +1309,3 @@ df = pandas.DataFrame({
     'decryption_times':decryption_times,
 })
 df.to_csv('csv/%s_data.csv' % name)
-"""
