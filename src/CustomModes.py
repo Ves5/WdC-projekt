@@ -6,6 +6,8 @@ from Crypto.Cipher import DES3, AES
 from Crypto.Util.Padding import pad, unpad
 from Crypto.Random import get_random_bytes
 
+import os
+
 
 class CustomModes:
     """
@@ -23,7 +25,7 @@ class CustomModes:
         :param algorithm: algorithm to use: AES/DES3; default is AES
         """
 
-        self.__executor = ThreadPoolExecutor(max_workers=3)
+        self.__executor = ThreadPoolExecutor(max_workers=int(os.cpu_count() - 1))
         self.__result = []  # place for results of workers
         self.__algorithm = algorithm
 
@@ -329,7 +331,7 @@ class CustomModes:
             status = []
             i = 0
             while i < len(plaintext):
-                ctrblock = self.__byte_xor(self.nonce, self.counter.to_bytes(8, 'big'))
+                ctrblock = self.__byte_xor(self.nonce, self.counter.to_bytes(self.__block_size, 'big'))
                 status.append(self.__executor.submit(self.__CRT_encrypt_worker, plaintext[i:i+self.__block_size],
                                                      ctrblock, i))
                 i += self.__block_size
@@ -353,7 +355,7 @@ class CustomModes:
             # convert all blocks to jobs
             i = 0
             while i < len(plaintext):
-                ctrblock = self.__byte_xor(self.nonce, self.counter.to_bytes(8, 'big'))
+                ctrblock = self.__byte_xor(self.nonce, self.counter.to_bytes(self.__block_size, 'big'))
                 temp = self.__cipher.encrypt(ctrblock)
                 self.__result[i:i+self.__block_size] = self.__byte_xor(temp, plaintext[i:i+self.__block_size])
                 i += self.__block_size
@@ -384,7 +386,7 @@ class CustomModes:
             status = []
             i = 0
             while i < len(ciphertext):
-                ctrblock = self.__byte_xor(self.nonce, self.counter.to_bytes(8, 'big'))
+                ctrblock = self.__byte_xor(self.nonce, self.counter.to_bytes(self.__block_size, 'big'))
                 status.append(self.__executor.submit(self.__CRT_decrypt_worker, ciphertext[i:i+self.__block_size],
                                                      ctrblock, i))
                 i += self.__block_size
@@ -407,7 +409,7 @@ class CustomModes:
             # convert all blocks to jobs
             i = 0
             while i < len(ciphertext):
-                ctrblock = self.__byte_xor(self.nonce, self.counter.to_bytes(8, 'big'))
+                ctrblock = self.__byte_xor(self.nonce, self.counter.to_bytes(self.__block_size, 'big'))
                 temp = self.__cipher.encrypt(ctrblock)
                 self.__result[i:i+self.__block_size] = self.__byte_xor(temp, ciphertext[i:i+self.__block_size])
                 i += self.__block_size
@@ -419,18 +421,18 @@ class CustomModes:
             return plaintext.decode('utf-8')
 
 
-text = "text to be encrypted, z polśkimi znąkami"
-rkey = get_random_bytes(24)
-riv = get_random_bytes(8)
-rnonce = get_random_bytes(8)
+#text = "text to be encrypted, z polśkimi znąkami"
+#rkey = get_random_bytes(24)
+#riv = get_random_bytes(8)
+#rnonce = get_random_bytes(8)
 
-des3 = CustomModes(rkey, "DES3")
-des3.iv = riv
-des3.nonce = rnonce
+#des3 = CustomModes(rkey, "DES3")
+#des3.iv = riv
+#des3.nonce = rnonce
 
-des3.counter = 126
-print(text)
-encrypted = des3.encrypt_CTR(text)
-print(encrypted)
-decrypted = des3.decrypt_CTR(encrypted)
-print(decrypted)
+#des3.counter = 126
+#print(text)
+#encrypted = des3.encrypt_CTR(text)
+#print(encrypted)
+#decrypted = des3.decrypt_CTR(encrypted)
+#print(decrypted)
