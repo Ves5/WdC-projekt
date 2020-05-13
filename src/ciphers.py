@@ -106,8 +106,8 @@ def decrypt_Salsa20(msg, secret):
     plaintext = cipher.decrypt(ciphertext)
     return str(plaintext, 'utf-8')
 
-def get_key_pair():
-    private_key = RSA.generate(2048)
+def get_key_pair(length):
+    private_key = RSA.generate(length)
     public_key = private_key.publickey()
     return public_key, private_key
 
