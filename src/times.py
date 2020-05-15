@@ -1233,7 +1233,7 @@ print("RSA")
 # RSA - 1024 bits key
 encryption_times = []
 decryption_times = []
-name = "RSA-1024"
+name = "RSA-1024-NA"
 public_key, private_key = get_key_pair(1024)
 modulus = public_key.size_in_bytes() - 11
 for string_it in list_of_strings:
@@ -1246,17 +1246,21 @@ for string_it in list_of_strings:
         # split into modulus-char parts
         split = [(string_it[i:i+modulus]) for i in range(0, len(string_it), modulus)]
         # encode all parts
-        ciphertext = []
+        ciphertext = [0 for i in range(len(split))]
+        ii = 0
         start = timeit.default_timer()
         for part in split:
-            ciphertext.append(encrypt_RSA(part, public_key))
+            ciphertext[ii]=(encrypt_RSA(part, public_key))
+            ii += 1
         duration = timeit.default_timer() - start
         encryption_times.append(duration)
         # decode all ciphertext parts
-        plaintext = []
+        plaintext = [0 for i in range(len(split))]
+        ii = 0
         start = timeit.default_timer()
         for part in ciphertext:
-            plaintext.append(decrypt_RSA(part, private_key))
+            plaintext[ii]=(decrypt_RSA(part, private_key))
+            ii += 1
         duration = timeit.default_timer() - start
         decryption_times.append(duration)
     else:
@@ -1281,7 +1285,7 @@ df.to_csv('csv/%s_data.csv' % name)
 # RSA - 2048 bits key
 encryption_times = []
 decryption_times = []
-name = "RSA-2048"
+name = "RSA-2048-NA"
 public_key, private_key = get_key_pair(2048)
 modulus = public_key.size_in_bytes() - 11
 for string_it in list_of_strings:
@@ -1294,17 +1298,21 @@ for string_it in list_of_strings:
         # split into 128-char parts
         split = [(string_it[i:i+modulus]) for i in range(0, len(string_it), modulus)]
         # encode all parts
-        ciphertext = []
+        ciphertext = [0 for i in range(len(split))]
+        ii = 0
         start = timeit.default_timer()
         for part in split:
-            ciphertext.append(encrypt_RSA(part, public_key))
+            ciphertext[ii]=(encrypt_RSA(part, public_key))
+            ii += 1
         duration = timeit.default_timer() - start
         encryption_times.append(duration)
         # decode all ciphertext parts
-        plaintext = []
+        plaintext = [0 for i in range(len(split))]
+        ii = 0
         start = timeit.default_timer()
         for part in ciphertext:
-            plaintext.append(decrypt_RSA(part, private_key))
+            plaintext[ii]=(decrypt_RSA(part, private_key))
+            ii += 1
         duration = timeit.default_timer() - start
         decryption_times.append(duration)
     else:
@@ -1329,7 +1337,7 @@ df.to_csv('csv/%s_data.csv' % name)
 # RSA - 4096 bits key
 encryption_times = []
 decryption_times = []
-name = "RSA-4096"
+name = "RSA-4096-NA"
 public_key, private_key = get_key_pair(4096)
 modulus = public_key.size_in_bytes() - 11
 for string_it in list_of_strings:
@@ -1342,17 +1350,21 @@ for string_it in list_of_strings:
         # split into 128-char parts
         split = [(string_it[i:i+modulus]) for i in range(0, len(string_it), modulus)]
         # encode all parts
-        ciphertext = []
+        ciphertext = [0 for i in range(len(split))]
+        ii = 0
         start = timeit.default_timer()
         for part in split:
-            ciphertext.append(encrypt_RSA(part, public_key))
+            ciphertext[ii] = (encrypt_RSA(part, public_key))
+            ii+=1
         duration = timeit.default_timer() - start
         encryption_times.append(duration)
         # decode all ciphertext parts
-        plaintext = []
+        plaintext = [0 for i in range(len(split))]
+        ii=0
         start = timeit.default_timer()
         for part in ciphertext:
-            plaintext.append(decrypt_RSA(part, private_key))
+            plaintext[ii] = (decrypt_RSA(part, private_key))
+            ii+=1
         duration = timeit.default_timer() - start
         decryption_times.append(duration)
     else:
