@@ -5,7 +5,7 @@ from Crypto.Util.Padding import pad, unpad
 from Crypto.Random import get_random_bytes
 from Crypto.Cipher import Salsa20
 from Crypto.PublicKey import RSA
-from Crypto.Cipher import PKCS1_OAEP
+from Crypto.Cipher import PKCS1_v1_5
 
 def AES_encrypt(key: bytes, plaintext: str, mode: int, iv=None, nonce=None, counter=0):
     """
@@ -113,11 +113,11 @@ def get_key_pair(length):
 
 def encrypt_RSA(plaintext, public_key):
     bytetext = bytes(plaintext, 'utf-8')
-    cipher_rsa = PKCS1_OAEP.new(public_key)
+    cipher_rsa = PKCS1_v1_5.new(public_key)
     encoded_data = cipher_rsa.encrypt(bytetext)
     return encoded_data
 
 def decrypt_RSA(encoded_data, private_key):
-    cipher_rsa = PKCS1_OAEP.new(private_key)
-    bytetext = cipher_rsa.decrypt(encoded_data)
+    cipher_rsa = PKCS1_v1_5.new(private_key)
+    bytetext = cipher_rsa.decrypt(encoded_data, 0)
     return str(bytetext, 'utf-8')

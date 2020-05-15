@@ -1235,15 +1235,16 @@ encryption_times = []
 decryption_times = []
 name = "RSA-1024"
 public_key, private_key = get_key_pair(1024)
+modulus = public_key.size_in_bytes() - 11
 for string_it in list_of_strings:
     if len(string_it) > 2**20 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
     gc.disable()
-    if len(string_it) > 64:
-        # split into 128-char parts
-        split = [(string_it[i:i+64]) for i in range(0, len(string_it), 64)]
+    if len(string_it) > modulus:
+        # split into modulus-char parts
+        split = [(string_it[i:i+modulus]) for i in range(0, len(string_it), modulus)]
         # encode all parts
         ciphertext = []
         start = timeit.default_timer()
@@ -1282,15 +1283,16 @@ encryption_times = []
 decryption_times = []
 name = "RSA-2048"
 public_key, private_key = get_key_pair(2048)
+modulus = public_key.size_in_bytes() - 11
 for string_it in list_of_strings:
     if len(string_it) > 2**20 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
     gc.disable()
-    if len(string_it) > 128:
+    if len(string_it) > modulus:
         # split into 128-char parts
-        split = [(string_it[i:i+128]) for i in range(0, len(string_it), 128)]
+        split = [(string_it[i:i+modulus]) for i in range(0, len(string_it), modulus)]
         # encode all parts
         ciphertext = []
         start = timeit.default_timer()
@@ -1329,15 +1331,16 @@ encryption_times = []
 decryption_times = []
 name = "RSA-4096"
 public_key, private_key = get_key_pair(4096)
+modulus = public_key.size_in_bytes() - 11
 for string_it in list_of_strings:
     if len(string_it) > 2**20 and duration > 20:
         encryption_times.append('-')
         decryption_times.append('-')
         continue
     gc.disable()
-    if len(string_it) > 128:
+    if len(string_it) > modulus:
         # split into 128-char parts
-        split = [(string_it[i:i+128]) for i in range(0, len(string_it), 128)]
+        split = [(string_it[i:i+modulus]) for i in range(0, len(string_it), modulus)]
         # encode all parts
         ciphertext = []
         start = timeit.default_timer()
@@ -1370,7 +1373,7 @@ df = pandas.DataFrame({
     'decryption_times':decryption_times
 })
 df.to_csv('csv/%s_data.csv' % name)
-
+"""
 # ---------------------------------------------------------------------------------------------------
 # Salsa20 - Cryptodome
 # ---------------------------------------------------------------------------------------------------
@@ -1433,3 +1436,4 @@ df = pandas.DataFrame({
     'decryption_times':decryption_times,
 })
 df.to_csv('csv/%s_data.csv' % name)
+"""
