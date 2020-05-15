@@ -15,9 +15,23 @@
 
 ## keys-3DES/AES/Salsa20
 
-* Prędkość szyfrowania nie jest zależna od długości klucza, niezależnie od długości łańcucha znaków, czas pracy był taki sam.
+* Prędkość szyfrowania nie jest zależna od długości klucza, niezależnie od długości łańcucha znaków, czas pracy dla różnych długości kluczy był taki sam.
 
 ## keys-RSA
 
 * W przeciwieństwie do algorytmów symetrycznych, prędkość enkrypcji i dekrypcji w RSA jest zależna od długości klucza.
 * Im dłuższy klucz tym dłużej trwa algorytm.
+
+## AES - modes
+
+* ECB jest najszybszym trybem, a CBC najwolniejszym, CFB, OFB, CTR mają względnie zbliżone do siebie czasy enkrypcji i są niewiele wolniejsze od ECB.
+* CBC jest mniej więcej 10 razy wolniejsze niż inne tryby.
+
+## 3DES - modes
+
+* ECB jest najszybszym trybem, CFB najwolniejszym, CBC, OFB i CTR zbliżone do siebie czasy.
+* ECB jest 20-krotnie szybszy niż CFB, a pozostałe tryby znajdują się mniej więcej po środku, 10-krotnie wolniejsze niż ECB.
+
+## block-stream
+
+* Salsa20 ma podobny czas do AES, natomiast 3DES jest wolniejszy od obu.
