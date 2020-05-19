@@ -32,7 +32,7 @@ for index, i in enumerate(string_length):
     else:
         list_of_strings.append("".join((list_of_strings[index-1], list_of_strings[index-1])))
     # print("%d - %e s" % (len(list_of_strings[index]), timeit.default_timer() - start))
-
+"""
 # ---------------------------------------------------------------------------------------------------
 # AES - Cryptodome
 # ---------------------------------------------------------------------------------------------------
@@ -1220,7 +1220,7 @@ df = pandas.DataFrame(data={
     'slow_decryption_times':slow_decryption_times,
 })
 df.to_csv('csv/%s_data.csv' % name)
-
+"""
 # ---------------------------------------------------------------------------------------------------
 # RSA - Cryptodome
 # ---------------------------------------------------------------------------------------------------
@@ -1385,7 +1385,7 @@ df = pandas.DataFrame({
     'decryption_times':decryption_times
 })
 df.to_csv('csv/%s_data.csv' % name)
-
+"""
 # ---------------------------------------------------------------------------------------------------
 # Salsa20 - Cryptodome
 # ---------------------------------------------------------------------------------------------------
@@ -1448,3 +1448,4 @@ df = pandas.DataFrame({
     'decryption_times':decryption_times,
 })
 df.to_csv('csv/%s_data.csv' % name)
+"""
