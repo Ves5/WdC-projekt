@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cstring>
+#include <cstdio>
+#include <chrono>
 
 #include <openssl/aes.h>
 #include <openssl/rand.h>
@@ -121,9 +123,67 @@ int decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key,
 }
 
 int main() {
-    clock_t start;
+    //clock_t start, end_enc, end_dec;
 
-    int size = 1073741824;
+    FILE* fptr;
+
+    int amount = 26;
+    int lengths[26] = {32};
+    // lengths to test
+    for(int i = 1; i < amount; i ++){
+        lengths[i] = lengths[i-1]*2;
+        printf("%d, ", lengths[i]);
+    }
+    printf("Lengths done\n");
+    unsigned char *input, *output, *result;
+    char const *name = "./../../csv/OpenSSL-AES-CBC-32.csv";
+
+    unsigned char iv[AES_BLOCK_SIZE];
+    unsigned char key[32];
+    RAND_bytes(key, sizeof(key));
+
+    AES_KEY enc_key, dec_key;
+    AES_set_encrypt_key(key, sizeof(key)*8, &enc_key);
+    AES_set_decrypt_key(key, sizeof(key)*8, &dec_key);
+    //printf("Key init done\n");
+
+    fptr = fopen(name, "w");
+    if(!fptr)
+        return 1;
+    fprintf(fptr,",string_length,encyption_times,decryption_times\n");
+    //printf("File opened\n");
+
+    // encryption/decryption loop
+    for (size_t i = 0; i < amount; i++)
+    {
+        input = (unsigned char*)malloc(lengths[i]);
+        output = (unsigned char*)malloc(lengths[i] + 16);
+        result = (unsigned char*)malloc(lengths[i] + 16);
+        gen_random(input, lengths[i]);
+        //printf("Generated random string\n");
+        // encrypt
+        memset(iv, 0, AES_BLOCK_SIZE);
+        //printf("IV memset\n");
+        auto start = chrono::high_resolution_clock::now();
+        int len = encrypt(input, lengths[i], key, iv, output);
+        auto end_enc = chrono::high_resolution_clock::now() - start;
+        //printf("Encryption done\n");
+        free(input);
+        // decrypt
+        memset(iv, 0, AES_BLOCK_SIZE);
+        start = chrono::high_resolution_clock::now();
+        decrypt(output, len, key, iv, result);
+        auto end_dec = chrono::high_resolution_clock::now() - start;
+        //printf("Decryption done\n");
+        free(output);
+        free(result);
+        // save to file
+        fprintf(fptr, "%d,%d,%f,%f\n", (int) i, lengths[i], chrono::duration<double, milli>(end_enc).count() / 1000, chrono::duration<double, milli>(end_dec).count() / 1000);
+        printf("Wrote to file %d time(s).\n", (int) i+1);
+    }
+    
+    fclose(fptr);
+    /*int size = 1073741824;
     //int size = 1024*1024;
     unsigned char *input = (unsigned char *)malloc(size);
 
@@ -132,15 +192,7 @@ int main() {
     unsigned char *output = (unsigned char *)malloc(size);
     unsigned char *result = (unsigned char *)malloc(size);
 
-    unsigned char iv[AES_BLOCK_SIZE];
 
-    
-    unsigned char key[32];
-    RAND_bytes(key, sizeof(key));
-
-    AES_KEY enc_key, dec_key;
-    AES_set_encrypt_key(key, sizeof(key)*8, &enc_key);
-    AES_set_decrypt_key(key, sizeof(key)*8, &dec_key);
 
     memset(iv, 0, AES_BLOCK_SIZE);
     start = clock();
@@ -150,5 +202,5 @@ int main() {
 	memset(iv, 0, AES_BLOCK_SIZE);
     start = clock();
     decrypt(output, len, key, iv, result);
-    cout << "CBC dec: \t" << (clock() - start ) / (double) CLOCKS_PER_SEC << endl;
+    cout << "CBC dec: \t" << (clock() - start ) / (double) CLOCKS_PER_SEC << endl;*/
 }
