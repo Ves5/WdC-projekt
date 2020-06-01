@@ -124,7 +124,6 @@ int decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key,
 
 int main() {
     //clock_t start, end_enc, end_dec;
-
     FILE* fptr;
 
     int amount = 26;
@@ -136,7 +135,10 @@ int main() {
     }
     printf("Lengths done\n");
     unsigned char *input, *output, *result;
-    char const *name = "./../../csv/OpenSSL-AES-CBC-32.csv";
+    /*
+     * Name for file. 
+     */ 
+    char const *name = "./../../csv/OpenSSL-AES-CBC-32-noAESNI.csv";
 
     unsigned char iv[AES_BLOCK_SIZE];
     unsigned char key[32];
