@@ -22,17 +22,15 @@ try:
 except:
     pass
 
-#common beginning for measuring time for different crypto functions
+# generate testing strings
 string_length = genStringLengths(32, 25)
 list_of_strings = []
 for index, i in enumerate(string_length):
-    # start = timeit.default_timer()
     if i <= 1024:
         list_of_strings.append(randomString(i))
     else:
         list_of_strings.append("".join((list_of_strings[index-1], list_of_strings[index-1])))
-    # print("%d - %e s" % (len(list_of_strings[index]), timeit.default_timer() - start))
-"""
+
 # ---------------------------------------------------------------------------------------------------
 # AES - Cryptodome
 # ---------------------------------------------------------------------------------------------------
@@ -1220,7 +1218,7 @@ df = pandas.DataFrame(data={
     'slow_decryption_times':slow_decryption_times,
 })
 df.to_csv('csv/%s_data.csv' % name)
-"""
+
 # ---------------------------------------------------------------------------------------------------
 # RSA - Cryptodome
 # ---------------------------------------------------------------------------------------------------
@@ -1385,7 +1383,7 @@ df = pandas.DataFrame({
     'decryption_times':decryption_times
 })
 df.to_csv('csv/%s_data.csv' % name)
-"""
+
 # ---------------------------------------------------------------------------------------------------
 # Salsa20 - Cryptodome
 # ---------------------------------------------------------------------------------------------------
@@ -1448,4 +1446,3 @@ df = pandas.DataFrame({
     'decryption_times':decryption_times,
 })
 df.to_csv('csv/%s_data.csv' % name)
-"""
