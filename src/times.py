@@ -884,11 +884,11 @@ for string_it in list_of_strings:
         continue
     gc.disable()
     start = timeit.default_timer()
-    encoded_data = AES_encrypt(key, string_it, mode)
+    encoded_data = DES3_encrypt(key, string_it, mode)
     duration = timeit.default_timer() - start
     encryption_times.append(duration)
     start = timeit.default_timer()
-    received_data = AES_decrypt(key, encoded_data, mode)
+    received_data = DES3_decrypt(key, encoded_data, mode)
     duration = timeit.default_timer() - start
     decryption_times.append(duration)
     gc.enable()
